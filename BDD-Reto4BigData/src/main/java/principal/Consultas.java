@@ -10,11 +10,11 @@ public class Consultas {
 	private final SentenciasBBDD sentenciasBBDD = new SentenciasBBDD();
 	static final String Transaccion="select max(Transaccion) from actividad";
 
-	public Consultas() {
-		conexionConn =  Conexion.getConn();
+	public Consultas(Conexion conexion) {
+		conexionConn =  conexion.getConn();
 	}
 	
-	public Usuario login(String dni, String password) {
+	public String[] login(String dni, String password) {
 		try {
 			PreparedStatement st = null;
 			st = (PreparedStatement) ((java.sql.Connection) conexionConn).prepareStatement(sentenciasBBDD.CONSULTALOGUEAR);
@@ -26,16 +26,16 @@ public class Consultas {
 				String local = rs.getString("es.nombre");
 				String tipoNegocio = rs.getString("tipoNegocio");
 				String NIF = rs.getString("NIF");
-				Usuario user = new Usuario(nombre, local, tipoNegocio, NIF);
+				String[] user = {nombre, local, tipoNegocio, NIF};
 				return user;
 			} else {
-				Usuario user = new Usuario("", "", "", "");
+				String[] user = {"", "", "", ""};
 				return user;
 			}
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		}
-		Usuario user = new Usuario("", "", "", "");
+		String[] user = {"", "", "", ""};
 		return user;
 	}
 

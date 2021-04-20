@@ -10,9 +10,9 @@ public class Inserciones {
 	private java.sql.Connection conexionConn;
 	private InsercionesActividades insercionesActividades;
 
-	public Inserciones() {
-		conexionConn =  Conexion.getConn();
-		insercionesActividades = new InsercionesActividades();
+	public Inserciones(Conexion conexion) {
+		conexionConn =  conexion.getConn();
+		insercionesActividades = new InsercionesActividades(conexion);
 	}
 
 	public void insertarProductoActividad(int transaccion, String codigoAlimento, int cantidad, double precioFinal, String nifLocal, String fechaFormateada) {

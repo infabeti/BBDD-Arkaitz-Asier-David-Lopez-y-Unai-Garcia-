@@ -9,8 +9,8 @@ public class ConsultasComprobaciones {
 	private java.sql.Connection conexionConn;
 	private final SentenciasBBDD sentenciasBBDD = new SentenciasBBDD();
 
-	public ConsultasComprobaciones() {
-		conexionConn =  Conexion.getConn();
+	public ConsultasComprobaciones(Conexion conexion) {
+		conexionConn =  conexion.getConn();
 	}
 
 	public boolean comprobarSiExisteNIF(String nif) {

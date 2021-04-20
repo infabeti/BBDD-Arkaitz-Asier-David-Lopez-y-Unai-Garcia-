@@ -13,16 +13,9 @@ public class Conexion {
 	private final String URL = "jdbc:mysql://localhost:3306/" + NOMBREBD + "?useUnicode=true&use"
 			+ "JDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&" + "serverTimezone=UTC";
 
-	private static Connection conn = null;
-	private static Conexion conexion = null;
-	
-	public static void crearConexion(String puerto) {
-		if(conexion == null) {
-			conexion = new Conexion(puerto);
-		}
-	}
+	private Connection conn = null;
 
-	public static Connection getConn() {
+	public Connection getConn() {
 		return conn;
 	}
 
@@ -31,7 +24,7 @@ public class Conexion {
 	}
 
 	// constructor de la clase
-	private Conexion(String puerto) {
+	public Conexion(String puerto) {
 		try {
 			// obtener el driver
 			if(puerto.length()>1) {

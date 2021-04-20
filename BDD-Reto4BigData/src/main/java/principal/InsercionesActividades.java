@@ -9,8 +9,8 @@ public class InsercionesActividades {
 	private final SentenciasBBDD sentenciasBBDD = new SentenciasBBDD();
 	private java.sql.Connection conexionConn;
 
-	public InsercionesActividades() {
-		conexionConn =  Conexion.getConn();
+	public InsercionesActividades(Conexion conexion) {
+		conexionConn =  conexion.getConn();
 	}
 	
 	public void insertarActividad(int transaccion, String fecha, double totalOperacion, String tipo, String nif) {

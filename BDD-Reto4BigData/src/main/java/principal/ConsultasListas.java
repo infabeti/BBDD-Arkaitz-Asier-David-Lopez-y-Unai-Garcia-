@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import tipos.*;
+import java.util.ArrayList;
 
 public class ConsultasListas {
 	
@@ -12,12 +12,13 @@ public class ConsultasListas {
 	private final SentenciasBBDD sentenciasBBDD = new SentenciasBBDD();
 	static final String Transaccion="select max(Transaccion) from actividad";
 	
-	public ConsultasListas() {
-		conexionConn =  Conexion.getConn();
+	public ConsultasListas(Conexion conexion) {
+		this.conexionConn =  conexion.getConn();
 	}
 	
-	public ListaProductos cogerProductosLocal(String NIFLocal) {
-		ListaProductos listaProd = new ListaProductos();
+	public ArrayList<String[]> cogerProductosLocal(String NIFLocal) {
+		ArrayList<String[]> listaProductos = new ArrayList<String[]>();
+		String[] datosProducto = new String[5];
 		try {
 			PreparedStatement st = null;
 
@@ -27,21 +28,26 @@ public class ConsultasListas {
 
 			while (rs.next()) {
 				String nombre = rs.getString("a.nombre");
-				double pCompra = rs.getDouble("a.PCompra");
-				double pVenta = rs.getDouble("p.PVenta");
+				datosProducto[0] = nombre;
+				String pCompra = Double.toString(rs.getDouble("a.PCompra"));
+				datosProducto[1] = pCompra;
+				String pVenta = Double.toString(rs.getDouble("p.PVenta"));
+				datosProducto[2] = pVenta;
 				String tipo = rs.getString("a.Tipo");
-				Date feCad = rs.getDate("a.FeCad");
-				Producto prod = new Producto(nombre, feCad, tipo, pCompra, pVenta);
-				listaProd.addProducto(prod);
+				datosProducto[3] = tipo;
+				String feCad = rs.getDate("a.FeCad").toString();
+				datosProducto[4] = feCad;
+				listaProductos.add(datosProducto);
 			}
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		}
-		return listaProd;
+		return listaProductos;
 	}
 	
-	public ListaProductos cogerProductosAprovisionamiento() {
-		ListaProductos listaProd = new ListaProductos();
+	public ArrayList<String[]> cogerProductosAprovisionamiento() {
+		ArrayList<String[]> listaProductos = new ArrayList<String[]>();
+		String[] datosProducto = new String[5];
 		try {
 			PreparedStatement st = null;
 			st = (PreparedStatement) ((java.sql.Connection) conexionConn)
@@ -49,20 +55,26 @@ public class ConsultasListas {
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
 				String nombre = rs.getString("a.nombre");
-				double pCompra = rs.getDouble("a.PCompra");
+				datosProducto[0] = nombre;
+				String pCompra = Double.toString(rs.getDouble("a.PCompra"));
+				datosProducto[1] = pCompra;
+				String pVenta = Double.toString(rs.getDouble("p.PVenta"));
+				datosProducto[2] = pVenta;
 				String tipo = rs.getString("a.Tipo");
-				Date feCad = rs.getDate("a.FeCad");
-				Producto prod = new Producto(nombre, feCad, tipo, pCompra);
-				listaProd.addProducto(prod);
+				datosProducto[3] = tipo;
+				String feCad = rs.getDate("a.FeCad").toString();
+				datosProducto[4] = feCad;
+				listaProductos.add(datosProducto);
 			}
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
 		}
-		return listaProd;
+		return listaProductos;
 	}
 	
-	public ListaPlatos cogerListaPlatos(String NIFLocal) {
-		ListaPlatos listaPlatos = new ListaPlatos();
+	public ArrayList<String[]> cogerListaPlatos(String NIFLocal) {
+		ArrayList<String[]> listaPlatos = new ArrayList<String[]>();
+		String[] datosPlato = new String[2];
 		try {
 			PreparedStatement st = null;
 			st = (PreparedStatement) ((java.sql.Connection) conexionConn).prepareStatement(
@@ -71,9 +83,10 @@ public class ConsultasListas {
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
 				String nombre = rs.getString("p.Nombre");
-				double pvp = rs.getDouble("p.pvp");
-				Plato plato = new Plato(nombre, pvp);
-				listaPlatos.addPlato(plato);
+				datosPlato[0] = nombre;
+				String pvp = Double.toString(rs.getDouble("p.pvp"));
+				datosPlato[1] = pvp;
+				listaPlatos.add(datosPlato);
 			}
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
