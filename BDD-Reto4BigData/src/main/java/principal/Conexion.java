@@ -10,7 +10,7 @@ public class Conexion {
 	private final String USUARIO = "root";
 	private final String PASSWORD = "elorrieta";
 	private String puerto = "3306"; //Puerto default, se le puede dar un nuevo puerto
-	private final String URL = "jdbc:mysql://localhost:3306/" + NOMBREBD + "?useUnicode=true&use"
+	private final String URL = "jdbc:mysql://localhost:"+ puerto +"/" + NOMBREBD + "?useUnicode=true&use"
 			+ "JDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&" + "serverTimezone=UTC";
 
 	private Connection conn = null;

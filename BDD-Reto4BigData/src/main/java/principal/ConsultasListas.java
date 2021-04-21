@@ -18,26 +18,30 @@ public class ConsultasListas {
 	
 	public ArrayList<String[]> cogerProductosLocal(String NIFLocal) {
 		ArrayList<String[]> listaProductos = new ArrayList<String[]>();
-		String[] datosProducto = new String[5];
+		
 		try {
 			PreparedStatement st = null;
 
 			st = (PreparedStatement) ((java.sql.Connection) conexionConn).prepareStatement(sentenciasBBDD.CONSULTAPRODUCTOLOCAL);
 			st.setString(1, NIFLocal);
 			ResultSet rs = st.executeQuery();
-
+			
+			int cuenta = 0;
+			String nombre, pCompra, pVenta, tipo, feCad = "";
 			while (rs.next()) {
-				String nombre = rs.getString("a.nombre");
+				String[] datosProducto = new String[5];
+				nombre = rs.getString("a.nombre");
 				datosProducto[0] = nombre;
-				String pCompra = Double.toString(rs.getDouble("a.PCompra"));
+				pCompra = Double.toString(rs.getDouble("a.PCompra"));
 				datosProducto[1] = pCompra;
-				String pVenta = Double.toString(rs.getDouble("p.PVenta"));
+				pVenta = Double.toString(rs.getDouble("p.PVenta"));
 				datosProducto[2] = pVenta;
-				String tipo = rs.getString("a.Tipo");
+				tipo = rs.getString("a.Tipo");
 				datosProducto[3] = tipo;
-				String feCad = rs.getDate("a.FeCad").toString();
+				feCad = rs.getDate("a.FeCad").toString();
 				datosProducto[4] = feCad;
-				listaProductos.add(datosProducto);
+				listaProductos.add(cuenta, datosProducto);
+				cuenta++;
 			}
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
@@ -47,13 +51,13 @@ public class ConsultasListas {
 	
 	public ArrayList<String[]> cogerProductosAprovisionamiento() {
 		ArrayList<String[]> listaProductos = new ArrayList<String[]>();
-		String[] datosProducto = new String[5];
 		try {
 			PreparedStatement st = null;
 			st = (PreparedStatement) ((java.sql.Connection) conexionConn)
 					.prepareStatement(sentenciasBBDD.ALIMENTOORDENADO);
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
+				String[] datosProducto = new String[5];
 				String nombre = rs.getString("a.nombre");
 				datosProducto[0] = nombre;
 				String pCompra = Double.toString(rs.getDouble("a.PCompra"));
@@ -74,7 +78,6 @@ public class ConsultasListas {
 	
 	public ArrayList<String[]> cogerListaPlatos(String NIFLocal) {
 		ArrayList<String[]> listaPlatos = new ArrayList<String[]>();
-		String[] datosPlato = new String[2];
 		try {
 			PreparedStatement st = null;
 			st = (PreparedStatement) ((java.sql.Connection) conexionConn).prepareStatement(
@@ -82,6 +85,7 @@ public class ConsultasListas {
 			st.setString(1, NIFLocal);
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
+				String[] datosPlato = new String[2];
 				String nombre = rs.getString("p.Nombre");
 				datosPlato[0] = nombre;
 				String pvp = Double.toString(rs.getDouble("p.pvp"));
