@@ -185,13 +185,13 @@ values ('85296365L', 'Maria', 'Zambrano','maria123', '34567899K') ;
 /* Inserciones Alimentos y productos */
 
 insert into alimento 
-values(1, 'Aquarius', 'Bebida', null, '0.35', true,true,true,true,true);
+values(1, 'Aquarius', 'Bebida', '2021/02/20', '0.35', true,true,true,true,true);
 
 insert into producto
 values(1, 2.00);
 
 insert into alimento 
-values(2, 'Coca-cola', 'Bebida', null, '0.35', true,true,true,true,true);
+values(2, 'Coca-cola', 'Bebida', '2021/02/20', '0.35', true,true,true,true,true);
 
 insert into producto
 values(2, 1.80);
