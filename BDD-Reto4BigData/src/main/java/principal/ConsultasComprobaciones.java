@@ -10,7 +10,11 @@ public class ConsultasComprobaciones {
 	private final SentenciasBBDD sentenciasBBDD = new SentenciasBBDD();
 
 	public ConsultasComprobaciones(Conexion conexion) {
-		conexionConn =  conexion.getConn();
+		this.conexionConn =  conexion.getConn();
+	}
+	
+	public void setConexion(Conexion conexion) {
+		this.conexionConn = conexion.getConn();
 	}
 
 	public boolean comprobarSiExisteNIF(String nif) {
