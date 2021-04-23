@@ -27,7 +27,7 @@ public class Conexion {
 	public Conexion(String puerto) {
 		try {
 			// obtener el driver
-			if(puerto.length()>1) {
+			if(puerto.equals("33060")) {
 				this.puerto = puerto;
 			}
 			Class.forName("com.mysql.cj.jdbc.Driver");
