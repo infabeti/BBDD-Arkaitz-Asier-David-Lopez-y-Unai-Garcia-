@@ -56,18 +56,17 @@ public class ConsultasListas {
 			st = (PreparedStatement) ((java.sql.Connection) conexionConn)
 					.prepareStatement(sentenciasBBDD.ALIMENTOORDENADO);
 			ResultSet rs = st.executeQuery();
+			String nombre, pCompra, tipo, feCad = "";
 			while (rs.next()) {
-				String[] datosProducto = new String[5];
-				String nombre = rs.getString("a.nombre");
+				String[] datosProducto = new String[4];
+				nombre = rs.getString("a.nombre");
 				datosProducto[0] = nombre;
-				String pCompra = Double.toString(rs.getDouble("a.PCompra"));
+				pCompra = Double.toString(rs.getDouble("a.PCompra"));
 				datosProducto[1] = pCompra;
-				String pVenta = Double.toString(rs.getDouble("p.PVenta"));
-				datosProducto[2] = pVenta;
-				String tipo = rs.getString("a.Tipo");
-				datosProducto[3] = tipo;
-				String feCad = rs.getDate("a.FeCad").toString();
-				datosProducto[4] = feCad;
+				tipo = rs.getString("a.Tipo");
+				datosProducto[2] = tipo;
+				feCad = rs.getDate("a.FeCad").toString();
+				datosProducto[3] = feCad;
 				listaProductos.add(datosProducto);
 			}
 		} catch (SQLException sqlException) {

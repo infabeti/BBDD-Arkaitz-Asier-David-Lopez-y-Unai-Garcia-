@@ -24,7 +24,7 @@ public class SentenciasBBDD {
 		protected final String PLATOJOINCARTA = "Select p.Nombre, p.pvp from plato p join carta c on p.codigoplato = c.codigoplato where c.nif=?";
 		protected final String INSERTARAPROVISIONAMIENTO = "insert into aprovisionamiento " + "values(?,0)";	
 		protected final String CONSEGUIRNIFPORTRANS = "select nif from actividad where Transaccion = (select transaccion from lineaproducto where Transaccion =?)";
-		protected final String CODIGOALIMENTO = "SELECT cantidad from stock where CodigoAlimento =? and nif=?";
+		protected final String CODIGOALIMENTO = "SELECT cantidad from stock where CodigoAlimento =? and NIF=?";
 		protected final String PRECIOALIMENTO = "SELECT pcompra from alimento where CodigoAlimento =?";
 		protected final String ACTUALIZARSTOCK = "update stock set cantidad=? where nif=? and codigoalimento=?";
 		protected final String COMPROBARSIESAPROVISIONAMIENTO = "select tipo from actividad where transaccion=?";
