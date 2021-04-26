@@ -9,9 +9,8 @@ public class Conexion {
 	private final String NOMBREBD = "reto3";
 	private final String USUARIO = "root";
 	private final String PASSWORD = "elorrieta";
-	private String puerto = "3306"; //Puerto default, se le puede dar un nuevo puerto
-	private final String URL = "jdbc:mysql://localhost:"+ puerto +"/" + NOMBREBD + "?useUnicode=true&use"
-			+ "JDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&" + "serverTimezone=UTC";
+	private String puerto;
+	private String URL;
 
 	private Connection conn = null;
 
@@ -26,13 +25,13 @@ public class Conexion {
 	// constructor de la clase
 	public Conexion(String puerto) {
 		try {
+			this.puerto = puerto;
 			// obtener el driver
-			if(puerto.equals("33060")) {
-				this.puerto = puerto;
-			}
 			Class.forName("com.mysql.cj.jdbc.Driver");
 
 			// obtener la conexion
+			URL = "jdbc:mysql://localhost:"+ puerto +"/" + NOMBREBD + "?useUnicode=true&use"
+					+ "JDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&" + "serverTimezone=UTC";
 			conn = DriverManager.getConnection(URL, USUARIO, PASSWORD);
 			if (conn == null) {
 				System.out.println("******************NO SE PUDO CONECTAR " + NOMBREBD);
