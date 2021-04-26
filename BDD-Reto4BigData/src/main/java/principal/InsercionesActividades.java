@@ -13,20 +13,22 @@ public class InsercionesActividades {
 		conexionConn =  conexion.getConn();
 	}
 	
-	public void insertarActividad(int transaccion, String fecha, double totalOperacion, String tipo, String nif) {
+	public void insertarActividad(int transaccion, String fecha, String tipo, String nif) {
 		try {
 			PreparedStatement st = null;
 
 			st = (PreparedStatement) ((java.sql.Connection) conexionConn).prepareStatement(sentenciasBBDD.INSERTARACTIVIDAD);
 			st.setInt(1, transaccion);
 			st.setString(2, fecha);
-			st.setDouble(3, totalOperacion);
+			st.setDouble(3, 0);
 			st.setString(4, tipo);
 			st.setString(5, nif);
 			try {
 				st.executeUpdate();
 				st = (PreparedStatement) ((java.sql.Connection) conexionConn)
 						.prepareStatement(sentenciasBBDD.LLAMADAPROCEDIMIENTO);
+				st.setInt(1, transaccion);
+				st.executeUpdate();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

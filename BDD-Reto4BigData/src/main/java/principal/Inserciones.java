@@ -72,8 +72,7 @@ public class Inserciones {
 						ResultSet rs1 = st1.executeQuery();
 						rs1.next();
 						double pcompra = rs1.getDouble("PCompra");
-						insercionesActividades.insertarActividad(numTransaccion+1, fechaFormateada,
-								pcompra * 50, "aprovisionamiento", nifLocal);
+						insercionesActividades.insertarActividad(numTransaccion+1, fechaFormateada, "aprovisionamiento", nifLocal);
 						insercionesActividades.insertarAprovisionamiento(numTransaccion+1);
 						insertarProductoActividad(numTransaccion+1, codigoAlimento, 50, pcompra, nifLocal, fechaFormateada);
 					} catch (Exception e) {
