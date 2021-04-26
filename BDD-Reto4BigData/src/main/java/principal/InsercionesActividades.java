@@ -1,5 +1,6 @@
 package principal;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -25,11 +26,7 @@ public class InsercionesActividades {
 			st.setString(5, nif);
 			try {
 				st.executeUpdate();
-				PreparedStatement st2 = null;
-				st2 = (PreparedStatement) ((java.sql.Connection) conexionConn)
-						.prepareStatement(sentenciasBBDD.LLAMADAPROCEDIMIENTO);
-				st2.setInt(1, transaccion);
-				st2.executeUpdate();
+				ejecutarFuncion(transaccion);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -105,4 +102,26 @@ public class InsercionesActividades {
 			return false;
 		}
 	}
+
+	public boolean ejecutarFuncion(int transaccion) {
+		try {
+			CallableStatement cs = null;
+			cs = conexionConn.prepareCall(sentenciasBBDD.LLAMADAPROCEDIMIENTO);  
+			cs.setInt(1, transaccion);  
+			try {
+				cs.execute();
+				return true;
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+			
+		}
+		catch (SQLException sqlException) {
+			sqlException.printStackTrace();
+			return false;
+		}
+	}
+	
 }
