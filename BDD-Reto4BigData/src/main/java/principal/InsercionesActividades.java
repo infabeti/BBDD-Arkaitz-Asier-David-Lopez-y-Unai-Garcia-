@@ -25,10 +25,11 @@ public class InsercionesActividades {
 			st.setString(5, nif);
 			try {
 				st.executeUpdate();
-				st = (PreparedStatement) ((java.sql.Connection) conexionConn)
+				PreparedStatement st2 = null;
+				st2 = (PreparedStatement) ((java.sql.Connection) conexionConn)
 						.prepareStatement(sentenciasBBDD.LLAMADAPROCEDIMIENTO);
-				st.setInt(1, transaccion);
-				st.executeUpdate();
+				st2.setInt(1, transaccion);
+				st2.executeUpdate();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
