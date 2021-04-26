@@ -26,7 +26,6 @@ public class InsercionesActividades {
 			st.setString(5, nif);
 			try {
 				st.executeUpdate();
-				ejecutarFuncion(transaccion);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -109,7 +108,7 @@ public class InsercionesActividades {
 			cs = conexionConn.prepareCall(sentenciasBBDD.LLAMADAPROCEDIMIENTO);  
 			cs.setInt(1, transaccion);  
 			try {
-				cs.execute();
+				cs.executeUpdate();
 				return true;
 			}
 			catch(Exception e) {

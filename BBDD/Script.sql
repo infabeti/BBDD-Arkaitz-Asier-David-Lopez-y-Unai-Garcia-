@@ -475,7 +475,7 @@ begin
 
 	select tipo into TipoObtenido from actividad where Transaccion = TransaccionRecibida;
 
-	if TipoObtenido = 'TICKET' or 'FACTURA' or 'PEDIDO' or 'APROVISIONAMIENTO' then
+	if TipoObtenido = 'TICKET' or TipoObtenido = 'FACTURA' or TipoObtenido ='PEDIDO' or TipoObtenido ='APROVISIONAMIENTO' then
 		select sum(TotalProducto) into PrecioTotalProducto from lineaproducto where Transaccion = TransaccionRecibida;
         update Actividad set TotalOperacion= round(PrecioTotalProducto,2) where Transaccion = TransaccionRecibida;
 
@@ -487,4 +487,3 @@ begin
 	end if;
 
 end;//
-
