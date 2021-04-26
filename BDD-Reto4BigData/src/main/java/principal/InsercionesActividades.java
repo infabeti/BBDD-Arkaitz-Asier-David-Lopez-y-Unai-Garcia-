@@ -25,6 +25,9 @@ public class InsercionesActividades {
 			st.setString(5, nif);
 			try {
 				st.executeUpdate();
+				st = (PreparedStatement) ((java.sql.Connection) conexionConn)
+						.prepareStatement(sentenciasBBDD.INSERTARPRODUCTOACTIVIDAD);
+				st.executeUpdate();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

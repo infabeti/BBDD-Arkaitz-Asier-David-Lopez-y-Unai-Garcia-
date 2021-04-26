@@ -36,6 +36,9 @@ public class Inserciones {
 					if (rs.getString("tipo").equalsIgnoreCase("aprovisionamiento")) {
 						actualizarStockMenorQueCinco(codigoAlimento, nifLocal, transaccion, fechaFormateada);
 					}
+					st = (PreparedStatement) ((java.sql.Connection) conexionConn)
+							.prepareStatement(sentenciasBBDD.INSERTARPRODUCTOACTIVIDAD);
+					st.executeUpdate();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -76,6 +79,9 @@ public class Inserciones {
 								pcompra * 50, "aprovisionamiento", nifLocal);
 						insercionesActividades.insertarAprovisionamiento(numTransaccion+1);
 						insertarProductoActividad(numTransaccion+1, codigoAlimento, 50, pcompra, nifLocal, fechaFormateada);
+						st = (PreparedStatement) ((java.sql.Connection) conexionConn)
+								.prepareStatement(sentenciasBBDD.INSERTARPRODUCTOACTIVIDAD);
+						st.executeUpdate();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -101,6 +107,9 @@ public class Inserciones {
 			st.setString(3, codigoAlimento);
 
 			try {
+				st.executeUpdate();
+				st = (PreparedStatement) ((java.sql.Connection) conexionConn)
+						.prepareStatement(sentenciasBBDD.INSERTARPRODUCTOACTIVIDAD);
 				st.executeUpdate();
 			} catch (Exception e) {
 				e.printStackTrace();
