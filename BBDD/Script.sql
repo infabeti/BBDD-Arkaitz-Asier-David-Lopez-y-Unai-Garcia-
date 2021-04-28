@@ -475,12 +475,12 @@ begin
 
 	select tipo into TipoObtenido from actividad where Transaccion = TransaccionRecibida;
 
-	if TipoObtenido = 'TICKET' or TipoObtenido = 'FACTURA' or TipoObtenido ='PEDIDO' or TipoObtenido ='APROVISIONAMIENTO' then
-		select sum(TotalProducto) into PrecioTotalProducto from lineaproducto where Transaccion = TransaccionRecibida;
-        update Actividad set TotalOperacion= round(PrecioTotalProducto,2) where Transaccion = TransaccionRecibida;
+	select sum(TotalProducto) into PrecioTotalProducto from lineaproducto where Transaccion = TransaccionRecibida;
 
-	elseif TipoObtenido = 'COMANDA' then
-		select sum(TotalProducto) into PrecioTotalProducto from lineaproducto where Transaccion = TransaccionRecibida;
+	if TipoObtenido = 'TICKET' or TipoObtenido = 'FACTURA' or TipoObtenido ='PEDIDO' or TipoObtenido ='APROVISIONAMIENTO' then
+		update Actividad set TotalOperacion= round(PrecioTotalProducto,2) where Transaccion = TransaccionRecibida;
+
+	else
 		select sum(P.pvp*L.cantidad) into PrecioTotalPlato from lineaplato L join plato P on L.codigoplato = P.codigoplato where Transaccion = TransaccionRecibida;
 		update Actividad set TotalOperacion = round(PrecioTotalProducto + PrecioTotalPlato,2) where Transaccion = TransaccionRecibida;
 
