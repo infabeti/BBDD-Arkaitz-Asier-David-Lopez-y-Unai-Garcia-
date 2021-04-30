@@ -166,4 +166,13 @@ public class Inserciones {
 			sqlException.printStackTrace();
 		}
 	}
+	
+	public void realizarInsercion(PreparedStatement st) {
+		try {
+			st.executeUpdate();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
