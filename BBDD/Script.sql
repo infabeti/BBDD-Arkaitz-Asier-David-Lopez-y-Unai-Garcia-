@@ -43,13 +43,40 @@ gluten boolean not null default false,
 FrutosSecos boolean not null default false
 );
 
+create table fecha(
+Fecha date primary key,
+Probabilidad float not null
+);
+
 create table stock(
 NIF char(9) not null,
 CodigoAlimento int not null,
 cantidad int not null,
+Probabilidad float,
 constraint pk_stock primary key (NIF, CodigoAlimento),
 constraint fk_NIF_stock foreign key (NIF) references establecimiento (NIF) on update cascade,
 constraint fk_NIF_CodigoAlimento foreign key (CodigoAlimento) references alimento (CodigoAlimento) on update cascade
+);
+
+create table SeCombinaCon(
+NIF char(9) not null,
+CodigoAlimento int not null,
+Fecha date not null,
+constraint pk_SeCombinaCon primary key (NIF, CodigoAlimento),
+constraint fk_SeCombinaCon_NIF_CodigoAlimento foreign key (NIF,CodigoAlimento) references stock(NIF,CodigoAlimento) on update cascade,
+constraint fk_SeCombinaCon_fecha foreign key (Fecha) references fecha(Fecha) on update cascade
+);
+
+create table condiciona(
+CodigoAlimento int not null,
+CodigoAlimentoSuperior int not null,
+Fecha date not null,
+Probabilidad float not null,
+constraint pk_condiciona primary key (CodigoAlimento, CodigoAlimentoSuperior, Fecha),
+constraint fk_stock_fecha foreign key (Fecha) references fecha(Fecha) on update cascade,
+constraint fk_condiciona_CodigoAlimento foreign key (CodigoAlimento) references alimento (CodigoAlimento) on update cascade,
+constraint fk_condiciona_CodigoAlimentoSuperior foreign key (CodigoAlimentoSuperior) references alimento (CodigoAlimento) on update cascade
+
 );
 
 create table producto(
@@ -160,6 +187,7 @@ constraint fk_carta_nif foreign key (nif) references establecimiento(nif) on upd
 constraint fk_carta_codigoplato foreign key (codigoplato) references plato(codigoplato) on update cascade
 );
 
+
 /* Inserciones establecimientos */
 
 insert into establecimiento
@@ -265,103 +293,103 @@ values(13, 2);
 /* Stock de establecimiento */
 
 insert into stock
-values('12345678H', 1, 20);
+values('12345678H', 1, 20, null);
 
 insert into stock
-values('12345678H', 2, 20);
+values('12345678H', 2, 20, null);
 
 insert into stock
-values('12345678H', 3, 20);
+values('12345678H', 3, 20, null);
 
 insert into stock
-values('12345678H', 4, 100);
+values('12345678H', 4, 100, null);
 
 insert into stock
-values('12345678H', 5, 400);
+values('12345678H', 5, 400, null);
 
 insert into stock
-values('12345678H', 6, 100);
+values('12345678H', 6, 100, null);
 
 insert into stock
-values('12345678H', 7, 58);
+values('12345678H', 7, 58, null);
 
 insert into stock
-values('12345678H', 8, 69);
+values('12345678H', 8, 69, null);
 
 insert into stock
-values('12345678H', 11, 90);
+values('12345678H', 11, 90, null);
 
 insert into stock
-values('12345678H', 12, 150);
+values('12345678H', 12, 150, null);
 
 insert into stock
-values('12345678H', 10, 14);
+values('12345678H', 10, 14, null);
 
 insert into stock
-values('34567899K', 1, 20);
+values('34567899K', 1, 20, null);
 
 insert into stock
-values('34567899K', 2, 20);
+values('34567899K', 2, 20, null);
 
 insert into stock
-values('34567899K', 3, 20);
+values('34567899K', 3, 20, null);
 
 insert into stock
-values('34567899K', 4, 100);
+values('34567899K', 4, 100, null);
 
 insert into stock
-values('34567899K', 5, 400);
+values('34567899K', 5, 400, null);
 
 insert into stock
-values('34567899K', 6, 100);
+values('34567899K', 6, 100, null);
 
 insert into stock
-values('34567899K', 7, 58);
+values('34567899K', 7, 58, null);
 
 insert into stock
-values('34567899K', 8, 69);
+values('34567899K', 8, 69, null);
 
 insert into stock
-values('34567899K', 11, 90);
+values('34567899K', 11, 90, null);
 
 insert into stock
-values('34567899K', 12, 150);
+values('34567899K', 12, 150, null);
 
 insert into stock
-values('34567899K', 10, 14);
+values('34567899K', 10, 14, null);
 
 insert into stock
-values('23456789J', 1, 20);
+values('23456789J', 1, 20, null);
 
 insert into stock
-values('23456789J', 2, 20);
+values('23456789J', 2, 20, null);
 
 insert into stock
-values('23456789J', 3, 20);
+values('23456789J', 3, 20, null);
 
 insert into stock
-values('23456789J', 4, 100);
+values('23456789J', 4, 100, null);
 
 insert into stock
-values('23456789J', 5, 400);
+values('23456789J', 5, 400, null);
 
 insert into stock
-values('23456789J', 6, 100);
+values('23456789J', 6, 100, null);
 
 insert into stock
-values('23456789J', 7, 58);
+values('23456789J', 7, 58, null);
 
 insert into stock
-values('23456789J', 8, 69);
+values('23456789J', 8, 69, null);
 
 insert into stock
-values('23456789J', 11, 90);
+values('23456789J', 11, 90, null);
 
 insert into stock
-values('23456789J', 12, 150);
+values('23456789J', 12, 150, null);
 
 insert into stock
-values('23456789J', 10, 14);
+values('23456789J', 10, 14, null);
 
 
 /* INSERCIONES PLATOS */
