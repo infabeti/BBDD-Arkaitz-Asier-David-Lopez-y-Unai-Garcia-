@@ -30,6 +30,7 @@ public class SentenciasBBDD {
 		public final String COMPROBARSIESAPROVISIONAMIENTO = "select tipo from actividad where transaccion=?";
 		public final String CONSEGUIRPRECIOPRODUCTO = "select PCompra from alimento where nombre=?";
 		public final String LLAMADAPROCEDIMIENTO = "{call PrecioTotalPedido(?)}";
+		public final String DATOSACTIVIDADES = "select a.Transaccion, a.Fecha, a.NIF, al.Nombre, al.CodigoAlimento from actividad a join lineaproducto lp on a.Transaccion = lp.Transaccion join alimento al on al.CodigoAlimento = lp.CodigoAlimento where a.Tipo != 'aprovisionamiento'";
 }
 
 	
