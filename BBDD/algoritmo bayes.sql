@@ -1,4 +1,5 @@
- delimiter //
+drop procedure if exists AlgoritmoNaiveBayes;
+delimiter //
 create procedure AlgoritmoNaiveBayes(PrimerProducto varchar(40),SegundoProducto varchar(40))
 
 begin
@@ -11,6 +12,7 @@ declare contadortransaccion2 int;
 declare resultado float;
 declare contadorProducto1 int;
 declare contadorProducto2 int;
+declare probabilidadproductorelacion float;
 declare probabilidadproducto1 float;
 declare probabilidadproducto2 float;
 declare probabilidadproductototal float;
@@ -42,26 +44,30 @@ where CodigoAlimento=codproducto2);
 select count(transaccion) into contadorProducto1
 from LineaProducto
 where codproducto1=codigoalimento and transaccion in
-				(select transacciones from actividad
-				where fecha between current_date() and current_date()-6);
+				(select transaccion from actividad
+				where fecha between current_date() and (DATE_SUB(current_date(),INTERVAL 6 DAY)));
 
 select count(transaccion) into contadorProducto2
 from LineaProducto
 where codproducto2=codigoalimento and transaccion in
-				(select transacciones from actividad
-				where fecha between current_date() and current_date()-6);
+				(select transaccion from actividad
+				where fecha between current_date() and (DATE_SUB(current_date(),INTERVAL 6 DAY)));
 
-select count(transacciones) into contadortransaccionestotales
+select count(transaccion) into contadortransaccionestotales
 from actividad
-where fecha between current_date() and current_date()-6;
+where fecha between current_date() and (DATE_SUB(current_date(),INTERVAL 6 DAY));
+select concat(contadortransaccionestotales) Resultado1;
 
-set probabilidadproducto1 = (contadorproducto1/contadortransaccionestotales);
+set probabilidadproductorelacion = contadorproducto2/contadorproducto1;
 
-set probabilidadproducto2 = (contadorproducto2/contadortransaccionestotales);
+set probabilidadproducto1 = contadorproducto1/contadortransaccionestotales;
 
-set probabilidadproductototal = ((probabilidadproducto1/probabilidadproducto2)/resultado);
+set probabilidadproducto2 = contadorproducto2/contadortransaccionestotales;
 
-select concat('Coinciden ',contadortransacciones,' veces, el primer producto se ha comprado ',contadorProducto1,' veces y el segundo producto ',contadorProducto2,' veces.') Resultado;
+set probabilidadproductototal = (probabilidadproductorelacion*probabilidadproducto1)/probabilidadproducto2;
+
+select concat('Coinciden ',contadortransacciones,' veces, el primer producto se ha comprado ',contadorProducto1,' veces y el segundo producto ',contadorProducto2,' veces.
+La probabilidad conjunta es ',probabilidadproductorelacion,', la probabilidad del primer producto ',probabilidadproducto1,', probabilidad del segundo producto ',probabilidadproducto2,' y la probabilidad de que coincidan es de ',probabilidadproductototal) Resultado;
 
 /*
 select count(transacciones) into contadortransaccionestotales
