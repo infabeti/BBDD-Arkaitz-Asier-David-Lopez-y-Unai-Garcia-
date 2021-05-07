@@ -23,8 +23,8 @@ declare fec date;
 select count(Transaccion) into contadortransacciones
 from LineaProducto
 where CodigoAlimento=codproducto1 and transaccion in 
-(select LP.Transaccion from LineaProducto LP join actividad A on LP.Transaccion = A.Transaccion
-where CodigoAlimento=codproducto2 and NIF=nifLocal);
+	(select LP.Transaccion from LineaProducto LP join actividad A on LP.Transaccion = A.Transaccion
+	where CodigoAlimento=codproducto2 and A.NIF=nifLocal);
 
 select count(transaccion) into contadorProducto1
 from LineaProducto
@@ -52,18 +52,19 @@ set probabilidadproductototal = (probabilidadproductorelacion*probabilidadproduc
 
 if probabilidadproductototal is not null then
 
-select NIF, CodigoAlimento, CodigoAlimento2, Fecha into nifAli, codAli, codAliSup, fec from secombinacon where Fecha = current_date();
+	select NIF, CodigoAlimento, CodigoAlimento2, Fecha into nifAli, codAli, codAliSup, fec from secombinacon
+    where NIF = nifLocal and CodigoAlimento = codproducto1 and CodigoAlimento2 = codproducto2 and Fecha = current_date();
 
-if nifAli = nifLocal and codAli = codproducto1 and codAliSup = codproducto2 and fec = current_date() then
-update condiciona set Probabilidad = probabilidadproductototal
-where NIF = nifLocal and CodigoAlimento=codproducto1 and CodigoAlimento2=codproducto2 and Fecha=current_date();
-else
-if fec != current_date() then
-insert into fecha values (current_date());
-end if;
-insert into secombinacon values (nifLocal, codproducto1, codproducto2, current_date(), probabilidadproductototal);
-end if;
+	if nifAli = nifLocal and codAli = codproducto1 and codAliSup = codproducto2 and fec = current_date() then
+		update secombinacon set Probabilidad = probabilidadproductototal
+		where NIF = nifLocal and CodigoAlimento=codproducto1 and CodigoAlimento2=codproducto2 and Fecha=current_date();
+		else
+		if fec != current_date() then
+			insert into fecha values (current_date());
+		end if;
+		insert into secombinacon values (nifLocal, codproducto1, codproducto2, current_date(), probabilidadproductototal);
+	end if;
 end if;
 end//
 
-call AlgoritmoNaiveBayesEspecifico('23456789J','1','2');
+call AlgoritmoNaiveBayesEspecifico('12345678H','1','2');

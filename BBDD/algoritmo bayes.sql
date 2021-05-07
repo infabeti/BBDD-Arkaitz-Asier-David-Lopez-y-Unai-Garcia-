@@ -51,17 +51,18 @@ set probabilidadproductototal = (probabilidadproductorelacion*probabilidadproduc
 
 if probabilidadproductototal is not null then
 
-select CodigoAlimento, CodigoAlimentoSuperior, Fecha into codAli, codAliSup, fec from condiciona where Fecha = current_date();
+	select CodigoAlimento, CodigoAlimentoSuperior, Fecha into codAli, codAliSup, fec from condiciona
+    where CodigoAlimento = codproducto1 and CodigoAlimentoSuperior = codproducto2 and Fecha = current_date();
 
-if codAli = codproducto1 and codAliSup = codproducto2 and fec = current_date() then
-update condiciona set Probabilidad = probabilidadproductototal
-where CodigoAlimento=codproducto1 and CodigoAlimentoSuperior=codproducto2 and Fecha=current_date();
-else
-if fec != current_date() then
-insert into fecha values (current_date());
-end if;
-insert into condiciona values (codproducto1, codproducto2, current_date(), probabilidadproductototal);
-end if;
+	if codAli = codproducto1 and codAliSup = codproducto2 and fec = current_date() then
+		update condiciona set Probabilidad = probabilidadproductototal
+		where CodigoAlimento=codproducto1 and CodigoAlimentoSuperior=codproducto2 and Fecha=current_date();
+		else
+		if fec != current_date() then
+			insert into fecha values (current_date());
+		end if;
+		insert into condiciona values (codproducto1, codproducto2, current_date(), probabilidadproductototal);
+	end if;
 end if;
 end//
 
