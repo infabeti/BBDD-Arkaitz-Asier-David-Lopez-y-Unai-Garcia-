@@ -1,7 +1,6 @@
 drop procedure if exists AlgoritmoNaiveBayes;
 delimiter //
-create procedure AlgoritmoNaiveBayes(PrimerProducto varchar(40),SegundoProducto varchar(40))
-
+create procedure AlgoritmoNaiveBayes(codproducto1 int, codproducto2 int)
 begin
 
 declare fechatransaccion date;
@@ -16,30 +15,15 @@ declare probabilidadproductorelacion float;
 declare probabilidadproducto1 float;
 declare probabilidadproducto2 float;
 declare probabilidadproductototal float;
-declare codproducto1 int;
-declare codproducto2 int;
-
-select distinct CodigoAlimento into codproducto1
-from LineaProducto 
-where Codigoalimento=(select Codigoalimento
-						from alimento
-						where nombre=PrimerProducto);
-
-
-select distinct CodigoAlimento into codproducto2
-from LineaProducto 
-where Codigoalimento=(select Codigoalimento
-						from alimento
-					  where nombre=SegundoProducto);
+declare codAli int;
+declare codAliSup int;
+declare fec date;
 
 select count(Transaccion) into contadortransacciones
 from LineaProducto
 where CodigoAlimento=codproducto1 and transaccion in 
-(select Transaccion 
-from LineaProducto
+(select Transaccion from LineaProducto
 where CodigoAlimento=codproducto2);
-
-/*Funciona hasta aquí*/
 
 select count(transaccion) into contadorProducto1
 from LineaProducto
@@ -65,8 +49,19 @@ set probabilidadproducto2 = contadorproducto2/contadortransaccionestotales;
 
 set probabilidadproductototal = (probabilidadproductorelacion*probabilidadproducto1)/probabilidadproducto2;
 
+if probabilidadproductototal is not null then
+
+select CodigoAlimento, CodigoAlimentoSuperior, Fecha into codAli, codAliSup, fec from condiciona where Fecha = current_date();
+
+if codAli = codproducto1 and codAliSup = codproducto2 and fec = current_date() then
+update condiciona set Probabilidad = probabilidadproductototal
+where CodigoAlimento=codproducto1 and CodigoAlimentoSuperior=codproducto2 and Fecha=current_date();
+else
+insert into fecha values (current_date());
+insert into condiciona values (codproducto1, codproducto2, current_date(), probabilidadproductototal);
+end if;
+end if;
 end//
 
-call AlgoritmoNaiveBayes("Aquarius","Coca-cola");
-call AlgoritmoNaiveBayes("Aquarius","Aquarius");
+call AlgoritmoNaiveBayes('1','2');
 
