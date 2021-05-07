@@ -44,8 +44,7 @@ FrutosSecos boolean not null default false
 );
 
 create table fecha(
-Fecha date primary key,
-Probabilidad float not null
+Fecha date primary key
 );
 
 create table stock(
@@ -78,7 +77,6 @@ constraint pk_condiciona primary key (CodigoAlimento, CodigoAlimentoSuperior, Fe
 constraint fk_stock_fecha foreign key (Fecha) references fecha(Fecha) on update cascade,
 constraint fk_condiciona_CodigoAlimento foreign key (CodigoAlimento) references alimento(CodigoAlimento) on update cascade,
 constraint fk_condiciona_CodigoAlimentoSuperior foreign key (CodigoAlimentoSuperior) references alimento(CodigoAlimento) on update cascade
-
 );
 
 create table producto(
