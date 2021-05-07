@@ -65,10 +65,6 @@ set probabilidadproducto2 = contadorproducto2/contadortransaccionestotales;
 
 set probabilidadproductototal = (probabilidadproductorelacion*probabilidadproducto1)/probabilidadproducto2;
 
-select concat('Coinciden ',contadortransacciones,' veces, el primer producto se ha comprado ',contadorProducto1,' veces y el segundo producto ',contadorProducto2,' veces.
-La probabilidad conjunta es ',probabilidadproductorelacion,', la probabilidad del primer producto ',probabilidadproducto1,', probabilidad del segundo producto ',probabilidadproducto2,'
- y la probabilidad de que coincidan es de ',probabilidadproductototal) Resultado;
-
 end//
 
 call AlgoritmoNaiveBayes("Aquarius","Coca-cola");
