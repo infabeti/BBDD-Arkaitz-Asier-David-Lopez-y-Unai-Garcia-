@@ -47,7 +47,7 @@ set probabilidadproducto1 = contadorproducto1/contadortransaccionestotales;
 
 set probabilidadproducto2 = contadorproducto2/contadortransaccionestotales;
 
-set probabilidadproductototal = (probabilidadproductorelacion*probabilidadproducto1)/probabilidadproducto2;
+set probabilidadproductototal = round((probabilidadproductorelacion*probabilidadproducto1)/probabilidadproducto2,2);
 
 if probabilidadproductototal is not null then
 

@@ -536,19 +536,19 @@ declare codAliSup int;
 declare fec date;
 
 select count(Transaccion) into contadortransacciones
-from lineaproducto
+from LineaProducto
 where CodigoAlimento=codproducto1 and transaccion in 
-(select Transaccion from lineaproducto
+(select Transaccion from LineaProducto
 where CodigoAlimento=codproducto2);
 
 select count(transaccion) into contadorProducto1
-from lineaproducto
+from LineaProducto
 where codproducto1=codigoalimento and transaccion in
 				(select transaccion from actividad
 				where fecha between (DATE_SUB(current_date(),INTERVAL 6 DAY)) and current_date());
 
 select count(transaccion) into contadorProducto2
-from lineaproducto
+from LineaProducto
 where codproducto2=codigoalimento and transaccion in
 				(select transaccion from actividad
 				where fecha between (DATE_SUB(current_date(),INTERVAL 6 DAY)) and current_date());
@@ -563,7 +563,7 @@ set probabilidadproducto1 = contadorproducto1/contadortransaccionestotales;
 
 set probabilidadproducto2 = contadorproducto2/contadortransaccionestotales;
 
-set probabilidadproductototal = (probabilidadproductorelacion*probabilidadproducto1)/probabilidadproducto2;
+set probabilidadproductototal = round((probabilidadproductorelacion*probabilidadproducto1)/probabilidadproducto2,2);
 
 if probabilidadproductototal is not null then
 
@@ -606,19 +606,19 @@ declare codAliSup int;
 declare fec date;
 
 select count(Transaccion) into contadortransacciones
-from lineaproducto
+from LineaProducto
 where CodigoAlimento=codproducto1 and transaccion in 
-	(select LP.Transaccion from lineaproducto LP join actividad A on LP.Transaccion = A.Transaccion
+	(select LP.Transaccion from LineaProducto LP join actividad A on LP.Transaccion = A.Transaccion
 	where CodigoAlimento=codproducto2 and A.NIF=nifLocal);
 
 select count(transaccion) into contadorProducto1
-from lineaproducto
+from LineaProducto
 where codproducto1=codigoalimento and transaccion in
 				(select transaccion from actividad
 				where fecha between (DATE_SUB(current_date(),INTERVAL 6 DAY)) and current_date() and NIF=nifLocal);
 
 select count(transaccion) into contadorProducto2
-from lineaproducto
+from LineaProducto
 where codproducto2=codigoalimento and transaccion in
 				(select transaccion from actividad
 				where fecha between (DATE_SUB(current_date(),INTERVAL 6 DAY)) and current_date() and NIF=nifLocal);
@@ -633,7 +633,7 @@ set probabilidadproducto1 = contadorproducto1/contadortransaccionestotales;
 
 set probabilidadproducto2 = contadorproducto2/contadortransaccionestotales;
 
-set probabilidadproductototal = (probabilidadproductorelacion*probabilidadproducto1)/probabilidadproducto2;
+set probabilidadproductototal = round((probabilidadproductorelacion*probabilidadproducto1)/probabilidadproducto2,2);
 
 if probabilidadproductototal is not null then
 
