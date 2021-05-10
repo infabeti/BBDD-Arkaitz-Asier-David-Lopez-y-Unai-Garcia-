@@ -36,6 +36,7 @@ public class SentenciasBBDD {
 		public final String NAIVEESPECIFICO = "{call AlgoritmoNaiveBayesEspecifico(?,?,?)}";
 		public final String OBTENERHISTORICOGLOBAL = "Select * from condiciona order by Probabilidad desc Limit 10";
 		public final String OBTENERHISTORICOLOCAL = "Select CodigoAlimento, CodigoAlimento2, Fecha, Probabilidad from SeCombinaCon where NIF=? order by Probabilidad desc Limit 3";
+		public final String NOMBRECODIGO = "Select Nombre from aliimento where CodigoAlimento=?";
 }
 
 	
