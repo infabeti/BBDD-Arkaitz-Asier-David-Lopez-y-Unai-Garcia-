@@ -23,25 +23,13 @@ public class Inserciones {
 		}
 	}
 	
-	public boolean ejecutarFuncion(int transaccion) {
+	public boolean ejecutarFuncion(CallableStatement cs) {
 		try {
-			Connection conn = conexion.getConn();
-			CallableStatement cs = null;
-			cs = conn.prepareCall(sentenciasBBDD.LLAMADAPROCEDIMIENTO);  
-			cs.setInt(1, transaccion);  
-			try {
-				cs.executeUpdate();
-				conn.close();
-				return true;
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-				return false;
-			}
-			
+			cs.executeUpdate();
+			return true;
 		}
-		catch (SQLException sqlException) {
-			sqlException.printStackTrace();
+		catch(Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}
