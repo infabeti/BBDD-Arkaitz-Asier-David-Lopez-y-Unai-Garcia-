@@ -20,19 +20,19 @@ declare codAliSup int;
 declare fec date;
 
 select count(Transaccion) into contadortransacciones
-from LineaProducto
+from lineaproducto
 where CodigoAlimento=codproducto1 and transaccion in 
-(select Transaccion from LineaProducto
+(select Transaccion from lineaproducto
 where CodigoAlimento=codproducto2);
 
 select count(transaccion) into contadorProducto1
-from LineaProducto
+from lineaproducto
 where codproducto1=codigoalimento and transaccion in
 				(select transaccion from actividad
 				where fecha between (DATE_SUB(current_date(),INTERVAL 6 DAY)) and current_date());
 
 select count(transaccion) into contadorProducto2
-from LineaProducto
+from lineaproducto
 where codproducto2=codigoalimento and transaccion in
 				(select transaccion from actividad
 				where fecha between (DATE_SUB(current_date(),INTERVAL 6 DAY)) and current_date());
@@ -65,5 +65,3 @@ if probabilidadproductototal is not null then
 	end if;
 end if;
 end//
-
-call AlgoritmoNaiveBayes('1','2');
