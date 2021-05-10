@@ -2,11 +2,8 @@ package principal;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class Consultas {
-	
-	static final String Transaccion="select max(Transaccion) from actividad";
 
 	public Consultas() {}
 	
