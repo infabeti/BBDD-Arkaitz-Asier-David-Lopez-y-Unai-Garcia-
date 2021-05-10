@@ -62,7 +62,7 @@ CodigoAlimento int not null,
 CodigoAlimento2 int not null,
 Fecha date not null,
 Probabilidad float,
-constraint pk_SeCombinaCon primary key (NIF, CodigoAlimento),
+constraint pk_SeCombinaCon primary key (NIF, CodigoAlimento, CodigoAlimento2, Fecha),
 constraint fk_SeCombinaCon_NIF_CodigoAlimento foreign key (NIF,CodigoAlimento) references stock(NIF,CodigoAlimento) on update cascade,
 constraint fk_SeCombinaCon_fecha foreign key (Fecha) references fecha(Fecha) on update cascade,
 constraint fk_SeCombinaCon_CodigoAlimento2 foreign key (CodigoAlimento2) references alimento(CodigoAlimento) on update cascade
@@ -567,14 +567,17 @@ set probabilidadproductototal = (probabilidadproductorelacion*probabilidadproduc
 
 if probabilidadproductototal is not null then
 
-	select CodigoAlimento, CodigoAlimentoSuperior, Fecha into codAli, codAliSup, fec from condiciona
+	select CodigoAlimento, CodigoAlimentoSuperior into codAli, codAliSup from condiciona
     where CodigoAlimento = codproducto1 and CodigoAlimentoSuperior = codproducto2 and Fecha = current_date();
+    
+	select Fecha into fec from Fecha
+    where Fecha = current_date();
 
 	if codAli = codproducto1 and codAliSup = codproducto2 and fec = current_date() then
 		update condiciona set Probabilidad = probabilidadproductototal
 		where CodigoAlimento=codproducto1 and CodigoAlimentoSuperior=codproducto2 and Fecha=current_date();
-		else
-		if fec != current_date() then
+	else
+		if fec is null then
 			insert into fecha values (current_date());
 		end if;
 		insert into condiciona values (codproducto1, codproducto2, current_date(), probabilidadproductototal);
@@ -634,14 +637,17 @@ set probabilidadproductototal = (probabilidadproductorelacion*probabilidadproduc
 
 if probabilidadproductototal is not null then
 
-	select NIF, CodigoAlimento, CodigoAlimento2, Fecha into nifAli, codAli, codAliSup, fec from secombinacon
+	select NIF, CodigoAlimento, CodigoAlimento2 into nifAli, codAli, codAliSup from secombinacon
     where NIF = nifLocal and CodigoAlimento = codproducto1 and CodigoAlimento2 = codproducto2 and Fecha = current_date();
+    
+	select Fecha into fec from Fecha
+    where Fecha = current_date();
 
 	if nifAli = nifLocal and codAli = codproducto1 and codAliSup = codproducto2 and fec = current_date() then
 		update secombinacon set Probabilidad = probabilidadproductototal
 		where NIF = nifLocal and CodigoAlimento=codproducto1 and CodigoAlimento2=codproducto2 and Fecha=current_date();
-		else
-		if fec != current_date() then
+	else
+		if fec is null then
 			insert into fecha values (current_date());
 		end if;
 		insert into secombinacon values (nifLocal, codproducto1, codproducto2, current_date(), probabilidadproductototal);
