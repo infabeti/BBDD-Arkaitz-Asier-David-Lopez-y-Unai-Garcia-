@@ -13,7 +13,7 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry kind="lib" path="Librerias/commons-dbcp2-2.8.0.jar"/>
-	<classpathentry kind="lib" path="Librerias/commons-pool2-2.9.0.jar"/>
 	<classpathentry kind="lib" path="Librerias/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="Librerias/commons-pool2-2.9.0.jar"/>
 	<classpathentry kind="output" path="bin/default"/>
 </classpath>
