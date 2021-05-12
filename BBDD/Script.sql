@@ -65,7 +65,7 @@ Probabilidad float,
 constraint pk_SeCombinaCon primary key (NIF, CodigoAlimento, CodigoAlimento2, Fecha),
 constraint fk_SeCombinaCon_NIF_CodigoAlimento foreign key (NIF,CodigoAlimento) references stock(NIF,CodigoAlimento) on update cascade,
 constraint fk_SeCombinaCon_fecha foreign key (Fecha) references fecha(Fecha) on update cascade,
-constraint fk_SeCombinaCon_CodigoAlimento2 foreign key (CodigoAlimento2) references alimento(CodigoAlimento) on update cascade
+constraint fk_SeCombinaCon_CodigoAlimento2 foreign key (NIF, CodigoAlimento2) references stock(NIF,CodigoAlimento) on update cascade
 );
 
 create table condiciona(
