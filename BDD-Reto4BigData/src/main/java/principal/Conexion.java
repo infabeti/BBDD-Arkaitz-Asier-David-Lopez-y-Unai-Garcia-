@@ -45,17 +45,8 @@ public class Conexion {
 			bds.setMaxOpenPreparedStatements(10);
 			bds.setMaxIdle(5);
 			bds.setValidationQuery("select 1");
-			System.out.println("Seteado todos los parametros");
-			Connection conexion = bds.getConnection();
-			System.out.println("Creada una conexión de prueba");
-			conexion.close();
-			System.out.println("Cerrada la conexion de prueba");
 		} catch (ClassNotFoundException e) {
 			System.out.println("ocurre una ClassNotFoundException : " + e.getMessage());
-			System.exit(0);
-		} catch (SQLException e) {
-			System.out.println("ocurre una SQLException: " + e.getMessage());
-			System.out.println("Verifique que Mysql est� encendido...");
 			System.exit(0);
 		}
 	}
