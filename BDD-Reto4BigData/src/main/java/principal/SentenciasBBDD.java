@@ -30,6 +30,13 @@ public class SentenciasBBDD {
 		public final String COMPROBARSIESAPROVISIONAMIENTO = "select tipo from actividad where transaccion=?";
 		public final String CONSEGUIRPRECIOPRODUCTO = "select PCompra from alimento where nombre=?";
 		public final String LLAMADAPROCEDIMIENTO = "{call PrecioTotalPedido(?)}";
+		public final String DATOSACTIVIDADES = "select a.Transaccion, a.Fecha, a.NIF, al.Nombre, al.CodigoAlimento from actividad a join lineaproducto lp on a.Transaccion = lp.Transaccion join alimento al on al.CodigoAlimento = lp.CodigoAlimento where a.Tipo != 'aprovisionamiento'";
+		public final String CANTIDADPRODUCTOS = "select max(CodigoAlimento) maximo from alimento";
+		public final String NAIVEGLOBAL = "{call AlgoritmoNaiveBayes(?,?)}";
+		public final String NAIVEESPECIFICO = "{call AlgoritmoNaiveBayesEspecifico(?,?,?)}";
+		public final String OBTENERHISTORICOGLOBAL = "Select * from condiciona order by Probabilidad desc Limit 10";
+		public final String OBTENERHISTORICOLOCAL = "Select CodigoAlimento, CodigoAlimento2, Fecha, Probabilidad from SeCombinaCon where NIF=? order by Probabilidad desc Limit 3";
+		public final String NOMBRECODIGO = "Select Nombre from alimento where CodigoAlimento=?";
 }
 
 	

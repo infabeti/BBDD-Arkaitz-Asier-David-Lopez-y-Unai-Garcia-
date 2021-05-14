@@ -43,13 +43,40 @@ gluten boolean not null default false,
 FrutosSecos boolean not null default false
 );
 
+create table fecha(
+Fecha date primary key
+);
+
 create table stock(
 NIF char(9) not null,
 CodigoAlimento int not null,
 cantidad int not null,
 constraint pk_stock primary key (NIF, CodigoAlimento),
 constraint fk_NIF_stock foreign key (NIF) references establecimiento (NIF) on update cascade,
-constraint fk_NIF_CodigoAlimento foreign key (CodigoAlimento) references alimento (CodigoAlimento) on update cascade
+constraint fk_NIF_CodigoAlimento foreign key (CodigoAlimento) references alimento(CodigoAlimento) on update cascade
+);
+
+create table SeCombinaCon(
+NIF char(9) not null,
+CodigoAlimento int not null,
+CodigoAlimento2 int not null,
+Fecha date not null,
+Probabilidad float,
+constraint pk_SeCombinaCon primary key (NIF, CodigoAlimento, CodigoAlimento2, Fecha),
+constraint fk_SeCombinaCon_NIF_CodigoAlimento foreign key (NIF,CodigoAlimento) references stock(NIF,CodigoAlimento) on update cascade,
+constraint fk_SeCombinaCon_fecha foreign key (Fecha) references fecha(Fecha) on update cascade,
+constraint fk_SeCombinaCon_CodigoAlimento2 foreign key (NIF, CodigoAlimento2) references stock(NIF,CodigoAlimento) on update cascade
+);
+
+create table condiciona(
+CodigoAlimento int not null,
+CodigoAlimentoSuperior int not null,
+Fecha date not null,
+Probabilidad float not null,
+constraint pk_condiciona primary key (CodigoAlimento, CodigoAlimentoSuperior, Fecha),
+constraint fk_stock_fecha foreign key (Fecha) references fecha(Fecha) on update cascade,
+constraint fk_condiciona_CodigoAlimento foreign key (CodigoAlimento) references alimento(CodigoAlimento) on update cascade,
+constraint fk_condiciona_CodigoAlimentoSuperior foreign key (CodigoAlimentoSuperior) references alimento(CodigoAlimento) on update cascade
 );
 
 create table producto(
@@ -159,6 +186,7 @@ codigoplato int,
 constraint fk_carta_nif foreign key (nif) references establecimiento(nif) on update cascade,
 constraint fk_carta_codigoplato foreign key (codigoplato) references plato(codigoplato) on update cascade
 );
+
 
 /* Inserciones establecimientos */
 
@@ -478,12 +506,107 @@ begin
 	select sum(TotalProducto) into PrecioTotalProducto from lineaproducto where Transaccion = TransaccionRecibida;
 
 	if TipoObtenido = 'TICKET' or TipoObtenido = 'FACTURA' or TipoObtenido ='PEDIDO' or TipoObtenido ='APROVISIONAMIENTO' then
-		update Actividad set TotalOperacion= round(PrecioTotalProducto,2) where Transaccion = TransaccionRecibida;
+		update actividad set TotalOperacion= round(PrecioTotalProducto,2) where Transaccion = TransaccionRecibida;
 
 	else
 		select sum(P.pvp*L.cantidad) into PrecioTotalPlato from lineaplato L join plato P on L.codigoplato = P.codigoplato where Transaccion = TransaccionRecibida;
-		update Actividad set TotalOperacion = round(PrecioTotalProducto + PrecioTotalPlato,2) where Transaccion = TransaccionRecibida;
+		update actividad set TotalOperacion = round(PrecioTotalProducto + PrecioTotalPlato,2) where Transaccion = TransaccionRecibida;
 
 	end if;
 
 end;//
+
+create procedure AlgoritmoNaiveBayes(codproducto1 int, codproducto2 int)
+begin
+
+declare fechatransaccion date;
+declare contadortransacciones int;
+declare resultado float;
+declare contadorProducto2 int;
+declare probabilidadproductototal float;
+declare codAli int;
+declare codAliSup int;
+declare fec date;
+
+select count(Transaccion) into contadortransacciones
+from lineaproducto
+where CodigoAlimento=codproducto1 and transaccion in 
+(select Transaccion from lineaproducto
+where CodigoAlimento=codproducto2 and transaccion in
+				(select transaccion from actividad
+				where fecha between (DATE_SUB(current_date(),INTERVAL 6 DAY)) and current_date()));
+
+select count(transaccion) into contadorProducto2
+from lineaproducto
+where codproducto2=codigoalimento and transaccion in
+				(select transaccion from actividad
+				where fecha between (DATE_SUB(current_date(),INTERVAL 6 DAY)) and current_date());
+
+set probabilidadproductototal = round(contadortransacciones/contadorproducto2,2);
+
+if probabilidadproductototal is not null and probabilidadproductototal !=0 then
+
+	select CodigoAlimento, CodigoAlimentoSuperior into codAli, codAliSup from condiciona
+    where CodigoAlimento = codproducto1 and CodigoAlimentoSuperior = codproducto2 and Fecha = current_date();
+    
+	select Fecha into fec from Fecha
+    where Fecha = current_date();
+
+	if codAli = codproducto1 and codAliSup = codproducto2 and fec = current_date() then
+		update condiciona set Probabilidad = probabilidadproductototal
+		where CodigoAlimento=codproducto1 and CodigoAlimentoSuperior=codproducto2 and Fecha=current_date();
+	else
+		if fec is null then
+			insert into fecha values (current_date());
+		end if;
+		insert into condiciona values (codproducto1, codproducto2, current_date(), probabilidadproductototal);
+	end if;
+end if;
+end//
+
+create procedure AlgoritmoNaiveBayesEspecifico(nifLocal char(9), codproducto1 int, codproducto2 int)
+begin
+
+declare fechatransaccion date;
+declare contadortransacciones int;
+declare resultado float;
+declare contadorProducto2 int;
+declare probabilidadproductototal float;
+declare nifAli char(9);
+declare codAli int;
+declare codAliSup int;
+declare fec date;
+
+select count(Transaccion) into contadortransacciones
+from lineaproducto
+where CodigoAlimento=codproducto1 and transaccion in 
+	(select LP.Transaccion from lineaproducto LP join actividad A on LP.Transaccion = A.Transaccion
+	where CodigoAlimento=codproducto2 and A.NIF=nifLocal and fecha between (DATE_SUB(current_date(),INTERVAL 6 DAY)) and current_date());
+
+select count(transaccion) into contadorProducto2
+from lineaproducto
+where codproducto2=codigoalimento and transaccion in
+				(select transaccion from actividad
+				where fecha between (DATE_SUB(current_date(),INTERVAL 6 DAY)) and current_date() and NIF=nifLocal);
+
+set probabilidadproductototal = round(contadortransacciones/contadorproducto2,2);
+
+if probabilidadproductototal is not null and probabilidadproductototal !=0 then
+
+	select NIF, CodigoAlimento, CodigoAlimento2 into nifAli, codAli, codAliSup from secombinacon
+    where NIF = nifLocal and CodigoAlimento = codproducto1 and CodigoAlimento2 = codproducto2 and Fecha = current_date();
+    
+	select Fecha into fec from Fecha
+    where Fecha = current_date();
+
+	if nifAli = nifLocal and codAli = codproducto1 and codAliSup = codproducto2 and fec = current_date() then
+		update secombinacon set Probabilidad = probabilidadproductototal
+		where NIF = nifLocal and CodigoAlimento=codproducto1 and CodigoAlimento2=codproducto2 and Fecha=current_date();
+	else
+		if fec is null then
+			insert into fecha values (current_date());
+		end if;
+		insert into secombinacon values (nifLocal, codproducto1, codproducto2, current_date(), probabilidadproductototal);
+	end if;
+end if;
+end//
